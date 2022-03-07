@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Assignment_11</string>
+    <string name="contacts">contacts</string>
+    <string name="audio">Audio</string>
+    <string name="contact_icon">Contact icon</string>
+    <string name="audio_icon">Audio icon</string>
+    <string name="title">Loading</string>
+    <string name="message">Please wait…</string>
+    <string name="alert_title">Permissions required</string>
+    <string name="alert_message">Storage and contacts access permissions required , Please allow access to move further</string>
+    <string name="ok">OK</string>
+    <string name="denied_permissions">Please enable permissions form settings</string>
+</resources>
