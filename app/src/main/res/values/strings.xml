@@ -7,7 +7,10 @@
     <string name="title">Loading</string>
     <string name="message">Please wait…</string>
     <string name="alert_title">Permissions required</string>
-    <string name="alert_message">Storage and contacts access permissions required , Please allow access to move further</string>
+    <string name="alert_message">Please allow permission to access it</string>
     <string name="ok">OK</string>
-    <string name="denied_permissions">Please enable permissions form settings</string>
+    <string name="audio_denied_permissions">Please enable audio permissions form settings</string>
+    <string name="contact_denied_permissions">Please enable contact permissions form settings</string>
+    <string name="permission_granted">Permission granted</string>
+    <string name="enable_permission">Please enable permission</string>
 </resources>

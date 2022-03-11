@@ -44,13 +44,13 @@ public class ContactAsyncTask extends AsyncTask<Void, Void, ArrayList> {
     @SuppressLint("Range")
     @Override
     protected ArrayList doInBackground(Void... voids) {
-        //Initialize Uri
+
         Uri uri = ContactsContract.Contacts.CONTENT_URI;
 
-        //Sort by name in ascending order
+
         String sort = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC";
 
-        //Initialize cursor
+
         Cursor cursor = contextRef.get().getContentResolver().query(
                 uri, null, null, null, sort
         );

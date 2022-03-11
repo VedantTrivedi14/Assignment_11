@@ -47,8 +47,12 @@ public class ContactsFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
                 getContactList();
+                binding.contactDummyText.setVisibility(View.INVISIBLE);
+            }else{
+                binding.contactDummyText.setVisibility(View.VISIBLE);
             }
         } else {
+
             getContactList();
         }
     }

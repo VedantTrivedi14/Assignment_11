@@ -12,10 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.tatvasoftassignment.assignment_11.Adapter.ViewPagerAdapter;
 import com.tatvasoftassignment.assignment_11.Fragment.AudioFragment;
 import com.tatvasoftassignment.assignment_11.Fragment.ContactsFragment;
 import com.tatvasoftassignment.assignment_11.R;
-import com.tatvasoftassignment.assignment_11.Adapter.ViewPagerAdapter;
 import com.tatvasoftassignment.assignment_11.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
@@ -25,32 +25,25 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    ActivityMainBinding binding;
     private static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
-    ContactsFragment contactsFragment;
-    AudioFragment audioFilesFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         binding.tabLayout.setupWithViewPager(binding.viewPager);
-        ViewPagerAdapter viewPager  = new ViewPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        viewPager.addFragment(new AudioFragment(this),getString(R.string.audio));
-        viewPager.addFragment(new ContactsFragment(this),getString(R.string.contacts));
+        ViewPagerAdapter viewPager = new ViewPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        viewPager.addFragment(new AudioFragment(this), getString(R.string.audio));
+        viewPager.addFragment(new ContactsFragment(this), getString(R.string.contacts));
         binding.viewPager.setAdapter(viewPager);
 
-        if (checkAndRequestPermissions()) {
-            contactsFragment = new ContactsFragment(this);
-            audioFilesFragment = new AudioFragment(this);
-
-        }
-
+        checkAndRequestPermissions();
     }
-    private boolean checkAndRequestPermissions() {
+
+    private void checkAndRequestPermissions() {
 
         int permissionAudio = ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
         int permissionContact = ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_CONTACTS);
@@ -64,9 +57,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (!listPermissionsNeeded.isEmpty()) {
             ActivityCompat.requestPermissions(MainActivity.this, listPermissionsNeeded.toArray(new String[0]), REQUEST_ID_MULTIPLE_PERMISSIONS);
-            return false;
         }
-        return true;
     }
 
     @Override
@@ -85,10 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (permissionHashMap.get(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                         && permissionHashMap.get(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-
-                    audioFilesFragment = new AudioFragment(this);
-                    contactsFragment = new ContactsFragment(this);
-
+                    Toast.makeText(this, R.string.permission_granted, Toast.LENGTH_SHORT).show();
                 } else {
 
                     if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -98,11 +86,11 @@ public class MainActivity extends AppCompatActivity {
                                 (dialog, which) -> {
                                     if (which == DialogInterface.BUTTON_POSITIVE) {
                                         checkAndRequestPermissions();
+
                                     }
                                 });
-                    }
-                    else {
-                        Toast.makeText(MainActivity.this, getString(R.string.denied_permissions), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(MainActivity.this, R.string.enable_permission, Toast.LENGTH_LONG).show();
                     }
                 }
             }

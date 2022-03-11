@@ -1,0 +1,78 @@
+package com.tatvasoftassignment.assignment_11.AsycTask;
+
+
+
+import static com.tatvasoftassignment.assignment_11.Fragment.AudioFragment.binding;
+
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.provider.MediaStore;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+
+
+import com.tatvasoftassignment.assignment_11.Adapter.AudioAdapter;
+import com.tatvasoftassignment.assignment_11.Model.Audios;
+import com.tatvasoftassignment.assignment_11.R;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+
+public class AudioAsyncTask extends AsyncTask<Void, Void, ArrayList> {
+
+    private final WeakReference<Context> contextRef;
+    ProgressDialog progressDialog;
+
+    ArrayList<Audios> audioArrayList = new ArrayList<>();
+    AudioAdapter audioAdapter;
+
+    public AudioAsyncTask(Context context) {
+       contextRef  = new WeakReference<>(context);
+    }
+
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        progressDialog = new ProgressDialog(contextRef.get());
+        progressDialog.setTitle(contextRef.get().getString(R.string.title));
+        progressDialog.setMessage(contextRef.get().getString(R.string.message));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
+    }
+
+    @Override
+    protected ArrayList doInBackground(Void... voids) {
+
+        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        Cursor cursor = contextRef.get().getContentResolver().query(
+                uri, null, null, null, null
+        );
+
+
+        if (cursor != null && cursor.moveToNext()) {
+            int title_of_audio = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
+            do {
+                String title = cursor.getString(title_of_audio);
+                Audios audio = new Audios();
+                audio.setAudioName(title);
+                audioArrayList.add(audio);
+            } while (cursor.moveToNext());
+        }
+        assert cursor != null;
+        cursor.close();
+        return audioArrayList;
+    }
+
+    @Override
+    protected void onPostExecute(ArrayList arrayList) {
+        super.onPostExecute(arrayList);
+        progressDialog.dismiss();
+        binding.audioRecyclerView.setLayoutManager(new LinearLayoutManager(contextRef.get()));
+        audioAdapter= new AudioAdapter(arrayList, contextRef.get());
+        binding.audioRecyclerView.setAdapter(audioAdapter);
+    }
+}
