@@ -10,11 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.tatvasoftassignment.assignment_11.Adapter.ViewPagerAdapter;
-import com.tatvasoftassignment.assignment_11.Fragment.AudioFragment;
-import com.tatvasoftassignment.assignment_11.Fragment.ContactsFragment;
 import com.tatvasoftassignment.assignment_11.R;
 import com.tatvasoftassignment.assignment_11.databinding.ActivityMainBinding;
 
@@ -34,11 +32,17 @@ public class MainActivity extends AppCompatActivity {
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.tabLayout.setupWithViewPager(binding.viewPager);
-        ViewPagerAdapter viewPager = new ViewPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        viewPager.addFragment(new AudioFragment(this), getString(R.string.audio));
-        viewPager.addFragment(new ContactsFragment(this), getString(R.string.contacts));
-        binding.viewPager.setAdapter(viewPager);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(this, this);
+        binding.viewPager.setAdapter(adapter);
+
+        new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> {
+
+            if (position == 0) {
+                tab.setText(getString(R.string.audio));
+            } else if (position == 1) {
+                tab.setText(getString(R.string.contacts));
+            }
+        }).attach();
 
         checkAndRequestPermissions();
     }
