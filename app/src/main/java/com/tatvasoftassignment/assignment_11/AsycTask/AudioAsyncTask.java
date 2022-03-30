@@ -1,24 +1,20 @@
 package com.tatvasoftassignment.assignment_11.AsycTask;
 
 
-
 import static com.tatvasoftassignment.assignment_11.Fragment.AudioFragment.binding;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.provider.MediaStore;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 
 import com.tatvasoftassignment.assignment_11.Adapter.AudioAdapter;
 import com.tatvasoftassignment.assignment_11.Model.Audios;
 import com.tatvasoftassignment.assignment_11.R;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class AudioAsyncTask extends AudioBackGroundTask {
