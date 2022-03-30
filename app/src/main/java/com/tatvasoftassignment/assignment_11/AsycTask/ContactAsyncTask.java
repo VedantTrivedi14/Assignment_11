@@ -7,7 +7,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.provider.ContactsContract;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,27 +15,27 @@ import com.tatvasoftassignment.assignment_11.Adapter.ContactAdapter;
 import com.tatvasoftassignment.assignment_11.Model.Contacts;
 import com.tatvasoftassignment.assignment_11.R;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class ContactAsyncTask extends AsyncTask<Void, Void, ArrayList> {
+public class ContactAsyncTask extends ContactsBackGroundTask {
 
-    private final WeakReference<Context> contextRef;
+
     ProgressDialog progressDialog;
-
+    Context context;
     ArrayList<Contacts> contactsArrayList = new ArrayList<>();
     ContactAdapter contactAdapter;
 
-    public ContactAsyncTask(Context context) {
-        contextRef = new WeakReference<>(context);
+    public ContactAsyncTask(Context context){
+
+        this.context = context;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        progressDialog = new ProgressDialog(contextRef.get());
-        progressDialog.setTitle(contextRef.get().getString(R.string.title));
-        progressDialog.setMessage(contextRef.get().getString(R.string.message));
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setTitle(context.getString(R.string.title));
+        progressDialog.setMessage(context.getString(R.string.message));
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
     }
@@ -51,7 +50,7 @@ public class ContactAsyncTask extends AsyncTask<Void, Void, ArrayList> {
         String sort = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC";
 
 
-        Cursor cursor = contextRef.get().getContentResolver().query(
+        Cursor cursor = context.getContentResolver().query(
                 uri, null, null, null, sort
         );
         if (cursor.getCount() > 0) {
@@ -61,7 +60,7 @@ public class ContactAsyncTask extends AsyncTask<Void, Void, ArrayList> {
                 Uri uriPhone = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
                 String selection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " =?";
 
-                Cursor phoneCursor = contextRef.get().getContentResolver().query(
+                Cursor phoneCursor = context.getContentResolver().query(
                         uriPhone, null, selection, new String[]{id}, null
                 );
                 if (phoneCursor.moveToNext()) {
@@ -83,8 +82,8 @@ public class ContactAsyncTask extends AsyncTask<Void, Void, ArrayList> {
     protected void onPostExecute(ArrayList arrayList) {
         super.onPostExecute(arrayList);
         progressDialog.dismiss();
-        binding.contactsRecyclerView.setLayoutManager(new LinearLayoutManager(contextRef.get()));
-        contactAdapter = new ContactAdapter(arrayList, contextRef.get());
+        binding.contactsRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        contactAdapter = new ContactAdapter(arrayList, context);
         binding.contactsRecyclerView.setAdapter(contactAdapter);
 
     }

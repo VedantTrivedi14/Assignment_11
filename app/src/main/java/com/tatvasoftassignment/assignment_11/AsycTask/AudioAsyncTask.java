@@ -21,25 +21,25 @@ import com.tatvasoftassignment.assignment_11.R;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class AudioAsyncTask extends AsyncTask<Void, Void, ArrayList> {
+public class AudioAsyncTask extends AudioBackGroundTask {
 
-    private final WeakReference<Context> contextRef;
+    Context context;
     ProgressDialog progressDialog;
 
     ArrayList<Audios> audioArrayList = new ArrayList<>();
     AudioAdapter audioAdapter;
 
-    public AudioAsyncTask(Context context) {
-       contextRef  = new WeakReference<>(context);
+    public AudioAsyncTask(Context context){
+        this.context = context;
     }
 
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        progressDialog = new ProgressDialog(contextRef.get());
-        progressDialog.setTitle(contextRef.get().getString(R.string.title));
-        progressDialog.setMessage(contextRef.get().getString(R.string.message));
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setTitle(context.getString(R.string.title));
+        progressDialog.setMessage(context.getString(R.string.message));
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
     }
@@ -48,7 +48,7 @@ public class AudioAsyncTask extends AsyncTask<Void, Void, ArrayList> {
     protected ArrayList doInBackground(Void... voids) {
 
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        Cursor cursor = contextRef.get().getContentResolver().query(
+        Cursor cursor = context.getContentResolver().query(
                 uri, null, null, null, null
         );
 
@@ -71,8 +71,8 @@ public class AudioAsyncTask extends AsyncTask<Void, Void, ArrayList> {
     protected void onPostExecute(ArrayList arrayList) {
         super.onPostExecute(arrayList);
         progressDialog.dismiss();
-        binding.audioRecyclerView.setLayoutManager(new LinearLayoutManager(contextRef.get()));
-        audioAdapter= new AudioAdapter(arrayList, contextRef.get());
+        binding.audioRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        audioAdapter= new AudioAdapter(arrayList, context);
         binding.audioRecyclerView.setAdapter(audioAdapter);
     }
 }
